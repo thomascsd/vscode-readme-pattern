@@ -17,7 +17,7 @@
     "commands": [
       {
         "command": "extension.readme",
-        "title": "Hello World"
+        "title": "readme:generates README.md"
       }
     ]
   },
