@@ -1,14 +1,29 @@
 {
   "name": "vscode-readme-pattern",
   "displayName": "Readme Pattern",
-  "description": "",
-  "version": "0.0.1",
+  "description": "A VSCode extension that generates README.md files",
+  "version": "1.0.0",
+  "publisher": "Thomas Chang",
+  "author": "Thomas Chang",
+  "license": "MIT",
   "engines": {
     "vscode": "^1.35.0"
   },
   "categories": [
     "Other"
   ],
+  "keywords": [
+    "readme",
+    "Markdown"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thomascsd/vscode-readme-pattern.git"
+  },
+  "bugs": {
+    "url": "https://github.com/thomascsd/vscode-readme-pattern.git/issues"
+  },
+  "homepage": "https://github.com/thomascsd/vscode-readme-pattern",
   "activationEvents": [
     "onCommand:extension.readme"
   ],
@@ -17,7 +32,7 @@
     "commands": [
       {
         "command": "extension.readme",
-        "title": "readme:generates README.md"
+        "title": "readme: Generates README.md"
       }
     ]
   },
@@ -29,9 +44,9 @@
     "test": "npm run compile && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
-    "typescript": "^3.3.1",
-    "vscode": "^1.1.28",
-    "tslint": "^5.12.1",
+    "typescript": "^3.5.2",
+    "vscode": "^1.1.35",
+    "tslint": "^5.18.0",
     "@types/node": "^10.12.21",
     "@types/mocha": "^2.2.42"
   }
