@@ -13,33 +13,66 @@ export class ReadmeWriter {
     });
 
     if (selectedItem) {
-      await this.createFile(selectedItem);
+      this.createFile(selectedItem);
     }
   }
 
-  private async createFile(selectedItem: string) {
-    const readAsync = util.promisify(fs.readFile);
-    const writeAsync = util.promisify(fs.writeFile);
+  private createFile(selectedItem: string) {
     const tempPath = this.context.asAbsolutePath(path.join('templates', `${selectedItem}.md`));
-    const buffer = await readAsync(tempPath);
-    const edit = new vscode.WorkspaceEdit();
+    const buffer = fs.readFileSync(tempPath);
     const folders = vscode.workspace.workspaceFolders;
+    let content = '';
 
-    console.log(`textEditor:${folders}`);
+    console.log(`folders:${JSON.stringify(folders)}`);
+    console.log(`selectedItem:${selectedItem}`);
 
     if (folders) {
       const url = folders[0].uri;
-      const filePath = `${url.fsPath}/README.md`;
+      const filePath = `${url.fsPath}\\README.md`;
+      const isExist = fs.existsSync(filePath);
 
-      console.log(`url:${url.fsPath}`);
+      console.log(`url:${filePath}`);
+      console.log(`isExist:${isExist}`);
 
-      /*edit.createFile(url, {
-        overwrite: true
-      });
-      edit.set(url, [vscode.TextEdit.insert(new vscode.Position(0, 0), buffer.toString())]);
-
-      await vscode.workspace.applyEdit(edit);*/
-      await writeAsync(filePath, buffer.toString());
+      if (isExist) {
+        // const edit = new vscode.WorkspaceEdit();
+        // const document = await vscode.workspace.openTextDocument(filePath);
+        // const fullText = document.getText();
+        // const fullRange = new vscode.Range(
+        //   document.positionAt(0),
+        //   document.positionAt(fullText.length - 1)
+        // );
+        // edit.replace(vscode.Uri.parse(filePath), fullRange, buffer.toString());
+        fs.unlinkSync(filePath);
+      }
+      content = this.replaceContent(buffer.toString());
+      fs.writeFileSync(filePath, content);
     }
+  }
+
+  getProjectTitle() {
+    const folders = vscode.workspace.workspaceFolders;
+    let projectTitle = 'Project Title';
+
+    if (folders) {
+      const url = folders[0].uri;
+      const pkgUrl = `${url.fsPath}\\package.json`;
+
+      if (fs.existsSync(pkgUrl)) {
+        const packageBuff = fs.readFileSync(pkgUrl);
+        const pkg = JSON.parse(packageBuff.toString());
+        projectTitle = pkg.name;
+      }
+    }
+
+    return projectTitle;
+  }
+
+  replaceContent(content: string) {
+    const projectTitle = this.getProjectTitle();
+
+    content = content.replace(/@Project Title@/gi, projectTitle);
+
+    return content;
   }
 }
