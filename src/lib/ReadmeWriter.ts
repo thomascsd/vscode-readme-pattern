@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
-import * as util from 'util';
 import * as path from 'path';
 
 export class ReadmeWriter {
@@ -29,22 +28,9 @@ export class ReadmeWriter {
     if (folders) {
       const url = folders[0].uri;
       const filePath = `${url.fsPath}\\README.md`;
-      const isExist = fs.existsSync(filePath);
 
       console.log(`url:${filePath}`);
-      console.log(`isExist:${isExist}`);
 
-      if (isExist) {
-        // const edit = new vscode.WorkspaceEdit();
-        // const document = await vscode.workspace.openTextDocument(filePath);
-        // const fullText = document.getText();
-        // const fullRange = new vscode.Range(
-        //   document.positionAt(0),
-        //   document.positionAt(fullText.length - 1)
-        // );
-        // edit.replace(vscode.Uri.parse(filePath), fullRange, buffer.toString());
-        fs.unlinkSync(filePath);
-      }
       content = this.replaceContent(buffer.toString());
       fs.writeFileSync(filePath, content);
     }
