@@ -2,13 +2,12 @@
 
 > A VSCode extension that generates README.md files
 
-All Readme template based on [The-Documentation-Compendium](https://github.com/kylelobo/The-Documentation-Compendium)
-
-![Screenshot](https://github.com/thomascsd/vscode-readme-pattern/blob/master/js01.gif)
+![Screenshot](https://github.com/thomascsd/vscode-readme-pattern/blob/master/screenshot.gif)
 
 ## Features
 
-* Create Project name by reading package.json
+- Includes 4 readme templates: Bot, Hackathon, Minimal, Standard, based on [The-Documentation-Compendium](https://github.com/kylelobo/The-Documentation-Compendium/tree/master/README%20Templates)
+- Creates project name by reading package.json
 
 ## Release Notes
 
