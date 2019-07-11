@@ -27,7 +27,7 @@ export class ReadmeWriter {
 
     if (folders) {
       const url = folders[0].uri;
-      const filePath = `${url.fsPath}\\README.md`;
+      const filePath = path.join(url.fsPath, 'README.md');
 
       console.log(`url:${filePath}`);
 
@@ -42,7 +42,7 @@ export class ReadmeWriter {
 
     if (folders) {
       const url = folders[0].uri;
-      const pkgUrl = `${url.fsPath}\\package.json`;
+      const pkgUrl = path.join(url.fsPath, 'package.json');
 
       if (fs.existsSync(pkgUrl)) {
         const packageBuff = fs.readFileSync(pkgUrl);
