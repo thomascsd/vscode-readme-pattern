@@ -2,7 +2,7 @@
   "name": "vscode-readme-pattern",
   "displayName": "Readme Pattern",
   "description": "A VSCode extension that generates README.md files",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "publisher": "thomascsd",
   "author": "Thomas Chang",
   "license": "MIT",
@@ -46,10 +46,11 @@
     "deploy": "vsce publish"
   },
   "devDependencies": {
-    "typescript": "^3.5.2",
-    "vscode": "^1.1.35",
-    "tslint": "^5.18.0",
+    "@types/mocha": "^2.2.42",
     "@types/node": "^10.12.21",
-    "@types/mocha": "^2.2.42"
+    "@types/vscode": "^1.37.0",
+    "tslint": "^5.18.0",
+    "typescript": "^3.5.3",
+    "vscode-test": "^1.2.0"
   }
 }

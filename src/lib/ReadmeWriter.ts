@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
-import * as fs from 'fs';
 import * as path from 'path';
 
 export class ReadmeWriter {
+  fs = vscode.workspace.fs;
   constructor(private context: vscode.ExtensionContext) {}
 
   async insertReadme() {
@@ -12,13 +12,13 @@ export class ReadmeWriter {
     });
 
     if (selectedItem) {
-      this.createFile(selectedItem);
+      await this.createFile(selectedItem);
     }
   }
 
-  private createFile(selectedItem: string) {
+  private async createFile(selectedItem: string) {
     const tempPath = this.context.asAbsolutePath(path.join('templates', `${selectedItem}.md`));
-    const buffer = fs.readFileSync(tempPath);
+    const buffer = await this.fs.readFile(vscode.Uri.file(tempPath));
     const folders = vscode.workspace.workspaceFolders;
     let content = '';
 
@@ -31,21 +31,23 @@ export class ReadmeWriter {
 
       console.log(`url:${filePath}`);
 
-      content = this.replaceContent(buffer.toString());
-      fs.writeFileSync(filePath, content);
+      content = await this.replaceContent(buffer.toString());
+      await this.fs.writeFile(vscode.Uri.file(filePath), Buffer.from(content));
     }
   }
 
-  getProjectTitle() {
+  async getProjectTitle() {
     const folders = vscode.workspace.workspaceFolders;
     let projectTitle = 'Project Title';
 
     if (folders) {
       const url = folders[0].uri;
       const pkgUrl = path.join(url.fsPath, 'package.json');
+      const pkgUri = vscode.Uri.file(pkgUrl);
+      const state = await this.fs.stat(pkgUri);
 
-      if (fs.existsSync(pkgUrl)) {
-        const packageBuff = fs.readFileSync(pkgUrl);
+      if (state.size) {
+        const packageBuff = await this.fs.readFile(pkgUri);
         const pkg = JSON.parse(packageBuff.toString());
         projectTitle = pkg.name;
       }
@@ -54,8 +56,8 @@ export class ReadmeWriter {
     return projectTitle;
   }
 
-  replaceContent(content: string) {
-    const projectTitle = this.getProjectTitle();
+  async replaceContent(content: string) {
+    const projectTitle = await this.getProjectTitle();
 
     content = content.replace(/@Project Title@/gi, projectTitle);
 
