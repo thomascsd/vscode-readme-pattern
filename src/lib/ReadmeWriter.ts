@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
+import { JsonContentReader } from './JsonContentReader';
 
 export class ReadmeWriter {
   fs = vscode.workspace.fs;
@@ -17,9 +18,12 @@ export class ReadmeWriter {
   }
 
   private async createFile(selectedItem: string) {
-    const tempPath = this.context.asAbsolutePath(path.join('templates', `${selectedItem}.md`));
+    const tempPath = this.context.asAbsolutePath(
+      path.join('templates', `${selectedItem}.md`)
+    );
     const buffer = await this.fs.readFile(vscode.Uri.file(tempPath));
     const folders = vscode.workspace.workspaceFolders;
+    const reader = new JsonContentReader();
     let content = '';
 
     console.log(`folders:${JSON.stringify(folders)}`);
@@ -31,36 +35,8 @@ export class ReadmeWriter {
 
       console.log(`url:${filePath}`);
 
-      content = await this.replaceContent(buffer.toString());
+      content = await reader.replaceContent(buffer.toString());
       await this.fs.writeFile(vscode.Uri.file(filePath), Buffer.from(content));
     }
-  }
-
-  async getProjectTitle() {
-    const folders = vscode.workspace.workspaceFolders;
-    let projectTitle = 'Project Title';
-
-    if (folders) {
-      const url = folders[0].uri;
-      const pkgUrl = path.join(url.fsPath, 'package.json');
-      const pkgUri = vscode.Uri.file(pkgUrl);
-      const state = await this.fs.stat(pkgUri);
-
-      if (state.size) {
-        const packageBuff = await this.fs.readFile(pkgUri);
-        const pkg = JSON.parse(packageBuff.toString());
-        projectTitle = pkg.name;
-      }
-    }
-
-    return projectTitle;
-  }
-
-  async replaceContent(content: string) {
-    const projectTitle = await this.getProjectTitle();
-
-    content = content.replace(/@Project Title@/gi, projectTitle);
-
-    return content;
   }
 }
