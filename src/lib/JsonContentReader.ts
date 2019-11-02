@@ -6,8 +6,15 @@ export class JsonContentReader {
   async getProjectTitle() {
     let projectTitle = 'Project Title';
     let content = '';
+    const names = ['package.json', 'composer.json'];
 
-    content = await this.getPackageContent('package.json');
+    for (let name of names) {
+      content = await this.getPackageContent(name);
+
+      if (!content) {
+        break;
+      }
+    }
 
     if (content) {
       const pkg = JSON.parse(content);
