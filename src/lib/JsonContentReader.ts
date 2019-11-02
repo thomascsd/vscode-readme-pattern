@@ -4,27 +4,37 @@ import { existsSync } from 'fs';
 
 export class JsonContentReader {
   async getProjectTitle() {
-    const fs = vscode.workspace.fs;
-    const folders = vscode.workspace.workspaceFolders;
     let projectTitle = 'Project Title';
+    let content = '';
 
-    if (folders) {
-      const url = folders[0].uri;
-      const pkgUrl = path.join(url.fsPath, 'package.json');
-      const pkgUri = vscode.Uri.file(pkgUrl);
-      const hasFile = existsSync(pkgUrl);
+    content = await this.getPackageContent('package.json');
 
-      if (hasFile) {
-        const packageBuff = await fs.readFile(pkgUri);
-        const pkg = JSON.parse(packageBuff.toString());
-        projectTitle = pkg.name;
-      }
+    if (content) {
+      const pkg = JSON.parse(content);
+      projectTitle = pkg.name;
     }
-
     return projectTitle;
   }
 
-  getPackage(packageName: string) {}
+  async getPackageContent(packageName: string) {
+    const fs = vscode.workspace.fs;
+    const folders = vscode.workspace.workspaceFolders;
+    let content = '';
+
+    if (folders) {
+      const url = folders[0].uri;
+      const pkgUrl = path.join(url.fsPath, packageName);
+      const hasFile = existsSync(pkgUrl);
+
+      if (hasFile) {
+        const pkgUri = vscode.Uri.file(pkgUrl);
+        const packageBuff = await fs.readFile(pkgUri);
+        content = packageBuff.toString();
+      }
+    }
+
+    return content;
+  }
 
   async replaceContent(content: string) {
     const projectTitle = await this.getProjectTitle();
