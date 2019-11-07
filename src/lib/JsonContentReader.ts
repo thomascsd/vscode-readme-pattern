@@ -11,7 +11,7 @@ export class JsonContentReader {
     for (let name of names) {
       content = await this.getPackageContent(name);
 
-      if (!content) {
+      if (content) {
         break;
       }
     }
