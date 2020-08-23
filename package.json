@@ -25,7 +25,8 @@
   },
   "homepage": "https://github.com/thomascsd/vscode-readme-pattern",
   "activationEvents": [
-    "onCommand:extension.readme"
+    "onCommand:extension.readme",
+    "onCommand:extension.readmeOnExplorer"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -33,8 +34,20 @@
       {
         "command": "extension.readme",
         "title": "readme: Generates README.md"
+      },
+      {
+        "command": "extension.readmeOnExplorer",
+        "title": "readme: Generates README.md on here"
       }
-    ]
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "extension.readmeOnExplorer",
+          "when": "true"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

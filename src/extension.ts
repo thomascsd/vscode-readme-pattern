@@ -10,15 +10,25 @@ export function activate(context: vscode.ExtensionContext) {
   // This line of code will only be executed once when your extension is activated
   console.log('Congratulations, your extension "readme-pattern" is now active!');
 
-  // The command has been defined in the package.json file
-  // Now provide the implementation of the command with registerCommand
-  // The commandId parameter must match the command field in package.json
-  let disposable = vscode.commands.registerCommand('extension.readme', () => {
+  context.subscriptions.push(
+    vscode.commands.registerCommand('extension.readme', () => insertReadMe(context))
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand('extension.readmeOnExplorer', (e) =>
+      insertReadmeOnExplorer(context, e.path)
+    )
+  );
+
+  function insertReadMe(context: vscode.ExtensionContext) {
     const writer = new ReadmeWriter(context);
     writer.insertReadme();
-  });
+  }
 
-  context.subscriptions.push(disposable);
+  function insertReadmeOnExplorer(context: vscode.ExtensionContext, url: string) {
+    const writer = new ReadmeWriter(context);
+    writer.insertReadmeOnExplorer(url);
+  }
 }
 
 // this method is called when your extension is deactivated
