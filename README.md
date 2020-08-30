@@ -15,7 +15,7 @@
 - Includes 4 readme templates: Bot, Hackathon, Minimal, Standard, based on [The-Documentation-Compendium](https://github.com/kylelobo/The-Documentation-Compendium)
 - Creates README.md with context menu
 - Supports package.json and composer.json
-- Creates project name by reading package.json
+- Creates project name by reading config
 
 ## Logo
 
