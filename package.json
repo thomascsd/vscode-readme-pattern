@@ -37,7 +37,7 @@
       },
       {
         "command": "extension.readmeOnExplorer",
-        "title": "readme: Generates README.md on here"
+        "title": "Generates README.md on here"
       }
     ],
     "menus": {
@@ -49,6 +49,7 @@
       ]
     }
   },
+  "icon": "images/icon.png",
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
